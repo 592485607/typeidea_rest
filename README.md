@@ -10,3 +10,7 @@
 
 ######3.让用户登录
 
+## RESTful
+1. 编写serializer,在App下新增serializers.py 
+2. 新建View层逻辑，在app下新增apis.py 
+3. 配置url

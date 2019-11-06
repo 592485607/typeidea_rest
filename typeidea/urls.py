@@ -13,7 +13,7 @@ Including another URLconf
     1. Import the include() function: from django.conf.urls import url, include
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
-from django.conf.urls import url
+from django.conf.urls import url,include
 from django.contrib import admin
 
 # from blog.views import post_list,post_detail
@@ -76,6 +76,16 @@ from comment.views import (
 from django.contrib.sitemaps import views as sitemap_views
 from blog.rss import LatestPostFeed
 from blog.sitemap import PostSitemap
+#serializer
+# from blog.apis import post_list,PostList
+from rest_framework.routers import DefaultRouter
+from blog.apis import PostViewSet
+
+router = DefaultRouter()
+router.register(r'post',PostViewSet,base_name='api-post')
+
+# 配置API docs
+from rest_framework.documentation import include_docs_urls
 
 urlpatterns = [
     url(r'^$', IndexView.as_view(), name='index'),
@@ -91,4 +101,10 @@ urlpatterns = [
 
     url(r'^super_admin/', admin.site.urls, name='super-admin'),
     url(r'^admin/', custom_site.urls, name='dmin'),     # 基于URL上划分两套后台地址，一套管理用户，另一套管理业务
+
+    # url(r'^api/post/', PostList.as_view(), name='post-list'),
+    # url(r'^api/post/', post_list, name='post-list'),
+    url(r'^api/', include(router.urls,namespace='api')),
+
+    url(r'^api/docs/', include_docs_urls(title='typeidea apis')),
 ]
